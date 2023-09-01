@@ -46,25 +46,25 @@ class CommunityGAN(object):
 
         print('preparing checkpoint')
         self.latest_checkpoint = tf.train.latest_checkpoint(config.model_log)
-        self.saver = tf.train.Saver()
+        self.saver = tf.compat.v1.train.Saver()
 
         print('tensorflow initialization')
-        self.config = tf.ConfigProto()
+        self.config = tf.compat.v1.ConfigProto()
         self.config.gpu_options.allow_growth = True
-        self.init_op = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
-        self.sess = tf.Session(config=self.config)
+        self.init_op = tf.group(tf.compat.v1.global_variables_initializer(), tf.compat.v1.local_variables_initializer())
+        self.sess = tf.compat.v1.Session(config=self.config)
         self.sess.run(self.init_op)
 
     def build_generator(self):
         """initializing the generator"""
 
-        with tf.variable_scope("generator"):
+        with tf.compat.v1.variable_scope("generator"):
             self.generator = generator.Generator(self.graph.n_node, self.node_embed_init_g, config)
 
     def build_discriminator(self):
         """initializing the discriminator"""
 
-        with tf.variable_scope("discriminator"):
+        with tf.compat.v1.variable_scope("discriminator"):
             self.discriminator = discriminator.Discriminator(self.graph.n_node, self.node_embed_init_d, config)
 
     def train(self):
